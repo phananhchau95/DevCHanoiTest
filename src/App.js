@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
-import MovieDetail from './Detail';
 import { fetchMovies, fetchMovieDetails, fetchMovieReviews } from './rotten';
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
+      movieClicked: false,
+      movieName: '',
+      movieImgUri: ''
     }
   }
 
@@ -15,9 +17,6 @@ class App extends Component {
     .then(result => {
       this.setState({
         data: result,
-        movieClicked: false,
-        movieName: '',
-        movieImgUri: ''
       });
       console.log('this.state.data: ', this.state.data);
     });
@@ -28,6 +27,7 @@ class App extends Component {
       movieClicked: true,
       movieName: this.state.data.filter(item => item.id === id)[0].title,
       movieImgUri: this.state.data.filter(item => item.id === id)[0].posters.primary,
+      movieDesc: this.state.data.filter(item => item.id === id)[0].synopsis,
     });
 
   };
@@ -48,17 +48,21 @@ class App extends Component {
           </p>
         </header>
         {this.state.data.length ? !this.state.movieClicked ?
-        <div className="List-wrap">
+        <div className="List-wrap fade">
           {this.state.data.map((item) => <div>
             <button onClick={() => this.handleMovieClick(item.id)} className="Movie-item">{item.title}</button>
           </div>)}
         </div> :
-            <div>
-              <div className="Movie-img">
-                <img src={this.state.movieImgUri} alt=""/>
-              </div>
-            </div> :
-            <p>Sorry, no data</p>}
+        <div className={this.state.movieClicked && 'fade'}>
+          <div className="Movie-img">
+            <img src={this.state.movieImgUri} alt=""/>
+          </div>
+          <div className="Movie-info">
+            <div className="Movie-name">{this.state.movieName}</div>
+            <div className="Movie-desc">{this.state.movieDesc}</div>
+          </div>
+        </div> :
+        <p>Sorry, no data</p>}
         <div>
           <p>{this.state.movieName}</p>
         </div>
