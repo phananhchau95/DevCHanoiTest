@@ -8,7 +8,10 @@ class App extends Component {
       data: [],
       movieClicked: false,
       movieName: '',
-      movieImgUri: ''
+      movieImgUri: '',
+      movieDesc: '',
+      movieDetail: null,
+      ratingTomato: null,
     }
   }
 
@@ -23,13 +26,21 @@ class App extends Component {
   }
 
   handleMovieClick = id => {
+    fetchMovieDetails(id)
+    .then(result => {
+      this.setState({
+        movieDetail: result,
+        ratingTomato: result.ratings.critics_score,
+      });
+      console.log(this.state.movieDetail);
+      console.log('this.state.ratingTomato: ', this.state.ratingTomato);
+    });
     this.setState({
       movieClicked: true,
       movieName: this.state.data.filter(item => item.id === id)[0].title,
       movieImgUri: this.state.data.filter(item => item.id === id)[0].posters.primary,
-      movieDesc: this.state.data.filter(item => item.id === id)[0].synopsis,
+      movieDesc: this.state.data.filter(item => item.id === id)[0].synopsis.replace(/<\/?[^>]+(>|$)/g, ""),
     });
-
   };
 
   handleBack = () => {
@@ -48,21 +59,24 @@ class App extends Component {
           </p>
         </header>
         {this.state.data.length ? !this.state.movieClicked ?
-        <div className="List-wrap fade">
+        <div className="List-wrap">
           {this.state.data.map((item) => <div>
             <button onClick={() => this.handleMovieClick(item.id)} className="Movie-item">{item.title}</button>
           </div>)}
         </div> :
-        <div className={this.state.movieClicked && 'fade'}>
+        <div>
           <div className="Movie-img">
             <img src={this.state.movieImgUri} alt=""/>
           </div>
           <div className="Movie-info">
             <div className="Movie-name">{this.state.movieName}</div>
+            <div className="Movie-rating">
+              <div className="Tomato-rate">{this.state.ratingTomato}</div>
+            </div>
             <div className="Movie-desc">{this.state.movieDesc}</div>
           </div>
         </div> :
-        <p>Sorry, no data</p>}
+        <p>THIS IS LOADING</p>}
         <div>
           <p>{this.state.movieName}</p>
         </div>
