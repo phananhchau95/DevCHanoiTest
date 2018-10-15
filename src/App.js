@@ -31,6 +31,7 @@ class App extends Component {
       this.setState({
         movieDetail: result,
         ratingTomato: result.ratings.critics_score,
+        ratingAudience: result.ratings.audience_score,
       });
       console.log(this.state.movieDetail);
       console.log('this.state.ratingTomato: ', this.state.ratingTomato);
@@ -71,7 +72,8 @@ class App extends Component {
           <div className="Movie-info">
             <div className="Movie-name">{this.state.movieName}</div>
             <div className="Movie-rating">
-              <div className="Tomato-rate">{this.state.ratingTomato}</div>
+              <div className="Rating">{this.state.ratingTomato}</div>
+              <div className="Rating">{this.state.ratingAudience}</div>
             </div>
             <div className="Movie-desc">{this.state.movieDesc}</div>
           </div>
