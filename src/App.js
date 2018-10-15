@@ -2,29 +2,29 @@ import React, { Component } from 'react';
 import './App.css';
 import { fetchMovies, fetchMovieDetails, fetchMovieReviews } from './rotten';
 class App extends Component {
+  defaultState = {
+    movieClicked: false,
+    movieName: '',
+    movieImgUri: '',
+    movieDesc: '',
+    movieDetail: null,
+    ratingTomato: null,
+    ratingAudience: null
+  };
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
-      movieClicked: false,
-      movieName: '',
-      movieImgUri: '',
-      movieDesc: '',
-      movieDetail: null,
-      ratingTomato: null,
-    }
+      data: []
+    };
   }
-
   componentDidMount() {
     fetchMovies()
     .then(result => {
       this.setState({
         data: result,
       });
-      console.log('this.state.data: ', this.state.data);
     });
   }
-
   handleMovieClick = id => {
     fetchMovieDetails(id)
     .then(result => {
@@ -33,8 +33,7 @@ class App extends Component {
         ratingTomato: result.ratings.critics_score,
         ratingAudience: result.ratings.audience_score,
       });
-      console.log(this.state.movieDetail);
-      console.log('this.state.ratingTomato: ', this.state.ratingTomato);
+      console.log(result);
     });
     this.setState({
       movieClicked: true,
@@ -43,13 +42,9 @@ class App extends Component {
       movieDesc: this.state.data.filter(item => item.id === id)[0].synopsis.replace(/<\/?[^>]+(>|$)/g, ""),
     });
   };
-
   handleBack = () => {
-    this.setState({
-      movieClicked: false,
-    });
+    this.setState(this.defaultState);
   };
-
   render() {
     return (
       <div className="App">
@@ -65,7 +60,7 @@ class App extends Component {
             <button onClick={() => this.handleMovieClick(item.id)} className="Movie-item">{item.title}</button>
           </div>)}
         </div> :
-        <div>
+        <div className="Movie-detail">
           <div className="Movie-img">
             <img src={this.state.movieImgUri} alt=""/>
           </div>
@@ -86,5 +81,4 @@ class App extends Component {
     );
   }
 }
-
 export default App;
