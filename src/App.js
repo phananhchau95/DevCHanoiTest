@@ -51,7 +51,7 @@ class App extends Component {
         <header className="App-header">
           {this.state.movieClicked ? <button onClick={this.handleBack} className="Back-btn">back</button> : null}
           <p>
-              {this.state.movieName ? this.state.movieName : 'Top Movies'}
+              {this.state.movieName ? this.state.movieName : 'Top Clips'}
           </p>
         </header>
         {this.state.data.length ? !this.state.movieClicked ?
